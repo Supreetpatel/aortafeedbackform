@@ -132,7 +132,7 @@ export default function TripzortForm() {
             </h1>
           </div>
           <div className="flex gap-1 mb-1">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <motion.div
                 key={i}
                 initial={false}
