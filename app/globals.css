@@ -15,6 +15,15 @@
     box-shadow 0.15s,
     background 0.2s;
 }
+
+/* Hide scrollbar but allow scroll */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 .premium-btn:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 8px 32px 0 rgba(59, 138, 88, 0.25);

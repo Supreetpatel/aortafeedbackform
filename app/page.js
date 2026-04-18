@@ -36,6 +36,7 @@ export default function TripzortForm() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     source: "",
+    platform: "",
     area: "",
     problemTypes: [],
     raw: "",
@@ -44,7 +45,7 @@ export default function TripzortForm() {
   const next = () => setStep((s) => s + 1);
 
   const resetForm = () => {
-    setForm({ source: "", area: "", problemTypes: [], raw: "" });
+    setForm({ source: "", platform: "", area: "", problemTypes: [], raw: "" });
     setStep(1);
   };
 
@@ -58,6 +59,7 @@ export default function TripzortForm() {
       const { error } = await supabase.from("feedback").insert([
         {
           source: form.source,
+          platform: form.platform,
           area: form.area,
           problem_types: form.problemTypes,
           raw_text: form.raw,
@@ -97,7 +99,7 @@ export default function TripzortForm() {
       className="fixed inset-0 flex items-center justify-center overflow-hidden font-sans"
       style={{ backgroundColor: COLORS.bg }}
     >
-      <Toaster position="top-center" />
+      <Toaster position="bottom-right" />
 
       {/* Background Texture Overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-50 bg-[url('https://www.transparenttextures.com/patterns/felt.png')]" />
@@ -122,15 +124,15 @@ export default function TripzortForm() {
         {/* HEADER */}
         <header className="relative z-10 p-10 pb-6 flex justify-between items-end">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.3em] text-[#A0A090] uppercase">
-              Tripzort / 2026
+            <p className="text-xl font-bold tracking-[0.3em] text-[#A0A090] uppercase ">
+              Tripzort
             </p>
-            <h1 className="text-sm font-black italic uppercase tracking-tighter text-[#0A1C10]">
+            <h1 className="text-lg font-black italic uppercase tracking-tighter text-[#0A1C10]">
               Feedback Portal
             </h1>
           </div>
           <div className="flex gap-1 mb-1">
-            {[1, 2, 3, 4].map((i) => (
+            {[1, 2, 3, 4, 5].map((i) => (
               <motion.div
                 key={i}
                 initial={false}
@@ -145,7 +147,7 @@ export default function TripzortForm() {
         </header>
 
         {/* CONTENT AREA */}
-        <main className="relative z-10 flex-1 px-10 overflow-y-auto pb-10">
+        <main className="relative z-10 flex-1 px-10 overflow-y-auto pb-10 hide-scrollbar">
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -165,8 +167,11 @@ export default function TripzortForm() {
                 <div className="space-y-3">
                   {[
                     "Friend of Kaushal",
+                    "Friend of Friend",
+                    "Content Creator / Traveler",
                     "From Instagram",
-                    "Reddit User",
+                    "From Reddit",
+                    "Someone shared this link",
                     "Just exploring",
                   ].map((opt) => (
                     <motion.button
@@ -194,6 +199,48 @@ export default function TripzortForm() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
+                className="space-y-4"
+              >
+                <motion.h2
+                  variants={itemVars}
+                  className="text-4xl font-black text-[#0A1C10] leading-[0.9] tracking-tight uppercase italic"
+                >
+                  Platform<span className="text-[#3B8A58]">.</span>
+                </motion.h2>
+                <div className="grid grid-cols-1 gap-2 mb-4">
+                  {[
+                    "WhatsApp",
+                    "Instagram",
+                    "Reddit",
+                    "LinkedIn",
+                    "Email",
+                    "In Person",
+                    "Other",
+                  ].map((opt) => (
+                    <motion.button
+                      key={opt}
+                      variants={itemVars}
+                      whileHover={{ x: 5 }}
+                      onClick={() => {
+                        setForm({ ...form, platform: opt });
+                        next();
+                      }}
+                      className="w-full text-left p-5 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-[#3B8A58] transition-all font-bold text-[#0A1C10] text-sm"
+                    >
+                      {opt}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div
+                key="3"
+                variants={containerVars}
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 className="space-y-6"
               >
                 <motion.h2
@@ -204,10 +251,14 @@ export default function TripzortForm() {
                 </motion.h2>
                 <div className="space-y-3">
                   {[
-                    "App UI/UX",
-                    "Booking Flow",
-                    "Puri Peeks",
-                    "Performance",
+                    "Opening the app",
+                    "Peeks (hotel/place videos)",
+                    "Searching for hotels",
+                    "Booking a hotel",
+                    "Hotel or place details",
+                    "Payment",
+                    "App speed/ performance/ design",
+                    "Food & place discovery",
                   ].map((opt) => (
                     <motion.button
                       key={opt}
@@ -226,9 +277,9 @@ export default function TripzortForm() {
               </motion.div>
             )}
 
-            {step === 3 && (
+            {step === 4 && (
               <motion.div
-                key="3"
+                key="4"
                 variants={containerVars}
                 initial="initial"
                 animate="animate"
@@ -273,9 +324,9 @@ export default function TripzortForm() {
               </motion.div>
             )}
 
-            {step === 4 && (
+            {step === 5 && (
               <motion.div
-                key="4"
+                key="5"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="space-y-6"
@@ -293,14 +344,14 @@ export default function TripzortForm() {
                   onClick={handleFinalSubmit}
                   className="w-full py-5 bg-[#0A1C10] text-white rounded-xl font-black text-[10px] uppercase tracking-[0.3em] disabled:opacity-50"
                 >
-                  {loading ? "Transmitting..." : "Send Feedback"}
+                  {loading ? "Submitting..." : "Send Feedback"}
                 </button>
               </motion.div>
             )}
 
-            {step === 5 && (
+            {step === 6 && (
               <motion.div
-                key="5"
+                key="6"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="h-full flex flex-col items-center justify-center text-center"
